@@ -28,18 +28,4 @@
       <HintPath>..\..\..\..\..\..\Library\Frameworks\Xamarin.Android.framework\Versions\9.4.1.0\lib\xamarin.android\xbuild-frameworks\MonoAndroid\v8.1\Mono.Android.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="BaseCardValidator.cs" />
-    <None Remove="CreditCardDisplayView.xaml copy" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="CreditCardPage.xaml.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BaseCardValidator.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Remove="CreditCardDisplayView.xaml" />
-    <EmbeddedResource Remove="CreditCardDisplaView.xaml" />
-  </ItemGroup>
 </Project>
