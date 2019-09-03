@@ -4,6 +4,8 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using PayPal.Forms;
+using PayPal.Forms.Abstractions;
 
 namespace InfiniteMeals.iOS
 {
@@ -24,6 +26,24 @@ namespace InfiniteMeals.iOS
         {
             //Xamarin.Calabash.Start();
             global::Xamarin.Forms.Forms.Init();
+            var config = new PayPalConfiguration(PayPalEnvironment.NoNetwork, "Your PayPal ID from https://developer.paypal.com/developer/applications/")
+            {
+                //If you want to accept credit cards
+                AcceptCreditCards = true,
+                //Your business name
+                MerchantName = "Test Store",
+                //Your privacy policy Url
+                MerchantPrivacyPolicyUri = "https://www.example.com/privacy",
+                //Your user agreement Url
+                MerchantUserAgreementUri = "https://www.example.com/legal",
+                // OPTIONAL - ShippingAddressOption (Both, None, PayPal, Provided)
+                ShippingAddressOption = ShippingAddressOption.Both,
+                // OPTIONAL - Language: Default languege for PayPal Plug-In
+                Language = "es",
+                // OPTIONAL - PhoneCountryCode: Default phone country code for PayPal Plug-In
+                PhoneCountryCode = "52",
+            };
+            CrossPayPalManager.Init(config);
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

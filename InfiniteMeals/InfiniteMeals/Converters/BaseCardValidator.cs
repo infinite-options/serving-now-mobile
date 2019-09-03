@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CreditCardUISample.Converters
+namespace InfiniteMeals.Converters
 {
     public class BaseCardValidator
     {

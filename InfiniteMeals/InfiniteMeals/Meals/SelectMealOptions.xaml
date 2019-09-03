@@ -67,7 +67,7 @@
         </Grid>
     </ScrollView>-->
     <StackLayout Orientation="Vertical">
-        <Label XAlign="Center" x:Name="NoMealsLabel" Text="No Meals have been posted today for this kitchen."/>
+        <Label XAlign="Center" Margin="5, 10, 5, 10" x:Name="NoMealsLabel" Text="No Meals have been posted today for this kitchen."/>
         <ListView x:Name="mealsListView" HasUnevenRows="true" IsPullToRefreshEnabled="true" SelectionMode="None" Footer="">
             <ListView.ItemTemplate>
                 <DataTemplate>

@@ -2,7 +2,7 @@
 using System.Globalization;
 using Xamarin.Forms;
 
-namespace CreditCardUISample.Converters
+namespace InfiniteMeals.Converters
 {
     public class CardNumberToColorConverter : BaseCardValidator, IValueConverter
     {

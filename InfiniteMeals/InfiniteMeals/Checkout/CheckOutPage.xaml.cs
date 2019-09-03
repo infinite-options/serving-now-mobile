@@ -13,14 +13,15 @@ namespace InfiniteMeals
 {
     public class OrderInfo
     {
-        public string email = "amanag96@gmail.com"; 
-        public string name = "Aman Agrawal";
-        public string phone = "4088130108";
-        public string street = "212 Test Drive";
-        public string city = "San Jose";
-        public string state = "CA";
-        public string zipCode = "95139";
-        public string totalAmount = "37.00";
+        public string order_id = "";
+        public string email = ""; 
+        public string name = "";
+        public string phone = "";
+        public string street = "";
+        public string city = "";
+        public string state = "";
+        public string zipCode = "";
+        public string totalAmount = "";
         public bool paid = false;
         public string paymentType = "cash";
         //public string deliveryTime = "5:00 PM";
@@ -140,6 +141,11 @@ namespace InfiniteMeals
             // store total amount of the order
             currentOrder.totalAmount = (calculatedTaxAmount + totalCostsForMeals).ToString();
 
+            Guid g;
+            // Create and display the value of two GUIDs.
+            g = Guid.NewGuid();
+            currentOrder.order_id = g.ToString();
+
             orderNamesStackLayout.Children.Add(taxLabel);
             orderNamesStackLayout.Children.Add(totalAmountTextLabel);
 
@@ -184,9 +190,8 @@ namespace InfiniteMeals
                 Content = grid
             };
 
-            var checkoutButton = new Button() { Text = "Pay cash on pick up", HeightRequest = 40, Margin = new Thickness(20, 10, 20, 10), BorderWidth = 0.5, BorderColor = Color.Gray };
+            var checkoutButton = new Button() { Text = "Proceed to Payment", HeightRequest = 40, Margin = new Thickness(20, 10, 20, 10), BorderWidth = 0.5, BorderColor = Color.Gray};
             checkoutButton.Clicked += Handle_Clicked();
-
 
             mainStackLayout.Children.Add(scrollView);
             mainStackLayout.Children.Add(checkoutButton);
@@ -200,6 +205,7 @@ namespace InfiniteMeals
         private EventHandler Handle_Clicked()
         {
             return placeOrder;
+
         }
 
 
@@ -267,9 +273,11 @@ namespace InfiniteMeals
             //currentOrder.deliveryTime = deliveryTime.Time.ToString();
 
             await sendOrderRequest(currentOrder);
-            await DisplayAlert("Thank you!", "Your order has been placed. " + System.Environment.NewLine + " An email receipt has been sent to " + currentOrder.email + ".", "Continue");
+            await DisplayAlert("Thank you!", "Your order has been placed." + System.Environment.NewLine + " An email receipt has been sent to " + currentOrder.email + ". Please complete the payment process by clicking the button below.", "Continue to PayPal");
+            Device.OpenUri(new System.Uri("https://servingnow.me/payment/" + currentOrder.order_id + "/" +  currentOrder.totalAmount));
 
             await Navigation.PopModalAsync();
+
         }
             
 

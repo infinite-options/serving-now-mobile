@@ -31,7 +31,9 @@
 	<string>1.0</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We will use your camera to scan the credit card</string>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>8</string>
 </dict>
 </plist>
