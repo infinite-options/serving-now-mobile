@@ -32,6 +32,8 @@ namespace InfiniteMeals
 
                 foreach (var k in kitchens["result"])
                 {
+                    int dayOfWeekIndex = getDayOfWeekIndex(DateTime.Today);
+                    Boolean businessIsOpen = (Boolean) k["accepting_hours"]["L"][dayOfWeekIndex]["is_accepting"]["BOOL"];
                     this.Kitchens.Add(new KitchensModel()
                     {
                         kitchen_id = k["kitchen_id"]["S"].ToString(),
@@ -39,10 +41,10 @@ namespace InfiniteMeals
                         close_time = k["close_time"]["S"].ToString(),
                         description = k["description"]["S"].ToString(),
                         open_time = k["open_time"]["S"].ToString(),
-                        isOpen = (Boolean)k["isOpen"]["BOOL"],
-                        status = ((Boolean)k["isOpen"]["BOOL"] == true) ? "Open now" : "Closed",
-                        statusColor = ((Boolean)k["isOpen"]["BOOL"] == true) ? "Green" : "Red",
-                        opacity = ((Boolean)k["isOpen"]["BOOL"] == true) ? "1.0" : "0.6"
+                        isOpen = businessIsOpen,
+                        status = (businessIsOpen == true) ? "Open now" : "Closed",
+                        statusColor = (businessIsOpen == true) ? "Green" : "Red",
+                        opacity = (businessIsOpen == true) ? "1.0" : "0.6"
                     }
                     );
                 }
@@ -92,6 +94,25 @@ namespace InfiniteMeals
             }
 
             await Navigation.PushAsync(new SelectMealOptions(kitchen.kitchen_id));
+        }
+
+        private int getDayOfWeekIndex(DateTime day)
+        {
+            if (day.DayOfWeek == DayOfWeek.Sunday)
+                return 0;
+            if (day.DayOfWeek == DayOfWeek.Monday)
+                return 1;
+            if (day.DayOfWeek == DayOfWeek.Tuesday)
+                return 2;
+            if (day.DayOfWeek == DayOfWeek.Wednesday)
+                return 3;
+            if (day.DayOfWeek == DayOfWeek.Thursday)
+                return 4;
+            if (day.DayOfWeek == DayOfWeek.Friday)
+                return 5;
+            if (day.DayOfWeek == DayOfWeek.Saturday)
+                return 6;
+            return -1;
         }
     }
 }

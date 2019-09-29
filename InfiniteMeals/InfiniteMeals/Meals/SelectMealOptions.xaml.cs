@@ -51,7 +51,7 @@ namespace InfiniteMeals
                 {
                     //Console.WriteLine("created: " + m["created_at"]["S"]);
                     //Console.WriteLine("today: " + todaysDate);
-                    if (m["created_at"]["S"].ToString().Contains(todaysDate))
+                    if (m["created_at"]["S"].ToString().Contains(todaysDate) || strToBool(m["auto_renew"]["BOOL"].ToString()))
                     {
                         NoMealsLabel.IsVisible = false;
                         this.Meals.Add(new MealsModel()
@@ -132,6 +132,15 @@ namespace InfiniteMeals
                     mealObject.qty += 1;
                     mealOrdersCount += 1;
                 }
+            }
+        }
+
+        private Boolean strToBool(String s)
+        {
+            if (s == "True" || s == "true") {
+                return true;
+            } else {
+                return false;
             }
         }
 

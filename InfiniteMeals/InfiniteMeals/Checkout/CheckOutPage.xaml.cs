@@ -304,13 +304,6 @@ namespace InfiniteMeals
             request.Content = content;
             var client = new HttpClient();
             HttpResponseMessage response = await client.SendAsync(request);
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                DisplayAlert("Order Sent", "Thank you for your order. You can return to the previous screen to make another order.", "Done");
-
-                await Navigation.PopToRootAsync();
-            }
             //System.Console.WriteLine(response);
             //HttpResponseMessage response = null;
 
