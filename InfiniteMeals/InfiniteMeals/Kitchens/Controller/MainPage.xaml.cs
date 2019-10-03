@@ -33,14 +33,13 @@ namespace InfiniteMeals
                 foreach (var k in kitchens["result"])
                 {
                     int dayOfWeekIndex = getDayOfWeekIndex(DateTime.Today);
-                    //  Is business open?
-                    TimeSpan start_time = TimeSpan.Parse(k["accepting_hours"]["L"][dayOfWeekIndex]["MAP"]["open_time"]["S"].ToString());
-                    TimeSpan end_time = TimeSpan.Parse(k["accepting_hours"]["L"][dayOfWeekIndex]["MAP"]["close_time"]["S"].ToString());
-                    Boolean isAccepting = (Boolean) k["accepting_hours"]["L"][dayOfWeekIndex]["MAP"]["is_accepting"]["BOOL"];
-                    //TimeSpan start_time = TimeSpan.Parse("11:00");
-                    //TimeSpan end_time = TimeSpan.Parse("17:00");
-                    //Boolean isAccepting = true;
-                    Boolean businessIsOpen = isBusinessOpen(start_time, end_time, isAccepting);
+                    //  Format from AM/PM to 24-hour format
+                    string start_time = DateTime.Parse((string)k["open_time"]["S"]).ToString("HH:mm");
+                    string end_time = DateTime.Parse((string)k["close_time"]["S"]).ToString("HH:mm");
+                    //  Check if business is open for this day of the week
+                    Boolean isAccepting = (Boolean) k["isOpen"]["BOOL"];
+                    //  Overall, is the business open?
+                    Boolean businessIsOpen = isBusinessOpen(TimeSpan.Parse(start_time), TimeSpan.Parse(end_time), isAccepting);
                     this.Kitchens.Add(new KitchensModel()
                     {
                         kitchen_id = k["kitchen_id"]["S"].ToString(),
