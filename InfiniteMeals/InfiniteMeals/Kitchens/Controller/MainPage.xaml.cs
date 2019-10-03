@@ -33,7 +33,11 @@ namespace InfiniteMeals
                 foreach (var k in kitchens["result"])
                 {
                     int dayOfWeekIndex = getDayOfWeekIndex(DateTime.Today);
-                    Boolean businessIsOpen = (Boolean) k["accepting_hours"]["L"][dayOfWeekIndex]["is_accepting"]["BOOL"];
+                    //  Is business open?
+                    TimeSpan start_time = TimeSpan.Parse(k["accepting_hours"]["L"][dayOfWeekIndex]["MAP"]["open_time"]["S"].ToString());
+                    TimeSpan end_time = TimeSpan.Parse(k["accepting_hours"]["L"][dayOfWeekIndex]["MAP"]["close_time"]["S"].ToString());
+                    Boolean isAccepting = (Boolean) k["accepting_hours"]["L"][dayOfWeekIndex]["MAP"]["is_accepting"]["BOOL"];
+                    Boolean businessIsOpen = isBusinessOpen(start_time, end_time, isAccepting);
                     this.Kitchens.Add(new KitchensModel()
                     {
                         kitchen_id = k["kitchen_id"]["S"].ToString(),
@@ -113,6 +117,44 @@ namespace InfiniteMeals
             if (day.DayOfWeek == DayOfWeek.Saturday)
                 return 6;
             return -1;
+        }
+
+        //  Function checking if business is currently open
+        private Boolean isBusinessOpen(TimeSpan open_time, TimeSpan close_time, Boolean is_accepting)
+        {
+            TimeSpan now = DateTime.Now.TimeOfDay;
+            //  Accepting orders on current day?
+            if (is_accepting == false)
+            {
+                return false;
+            }
+            else
+            {
+                //  Opening and closing hours on same day
+                if (open_time <= close_time)
+                {
+                    if (now >= open_time && now <= close_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                //  Opening and closing hours on different day
+                else
+                {
+                    if (now >= open_time || now <= close_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
         }
     }
 }
