@@ -37,6 +37,9 @@ namespace InfiniteMeals
                     TimeSpan start_time = TimeSpan.Parse(k["accepting_hours"]["L"][dayOfWeekIndex]["MAP"]["open_time"]["S"].ToString());
                     TimeSpan end_time = TimeSpan.Parse(k["accepting_hours"]["L"][dayOfWeekIndex]["MAP"]["close_time"]["S"].ToString());
                     Boolean isAccepting = (Boolean) k["accepting_hours"]["L"][dayOfWeekIndex]["MAP"]["is_accepting"]["BOOL"];
+                    //TimeSpan start_time = TimeSpan.Parse("11:00");
+                    //TimeSpan end_time = TimeSpan.Parse("17:00");
+                    //Boolean isAccepting = true;
                     Boolean businessIsOpen = isBusinessOpen(start_time, end_time, isAccepting);
                     this.Kitchens.Add(new KitchensModel()
                     {
