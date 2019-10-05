@@ -34,18 +34,21 @@ namespace InfiniteMeals
                 {
                     int dayOfWeekIndex = getDayOfWeekIndex(DateTime.Today);
                     //  Format from AM/PM to 24-hour format
-                    string start_time = DateTime.Parse((string)k["open_time"]["S"]).ToString("HH:mm");
-                    string end_time = DateTime.Parse((string)k["close_time"]["S"]).ToString("HH:mm");
+                    //string start_time = DateTime.Parse((string)k["open_time"]["S"]).ToString("HH:mm");
+                    //string end_time = DateTime.Parse((string)k["close_time"]["S"]).ToString("HH:mm");
+                    string start_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["open_time"]["S"];
+                    string end_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
                     //  Check if business is open for this day of the week
-                    Boolean isAccepting = (Boolean) k["isOpen"]["BOOL"];
+                    Boolean isAccepting = (Boolean)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["is_accepting"]["S"];
                     //  Overall, is the business open?
                     Boolean businessIsOpen = isBusinessOpen(TimeSpan.Parse(start_time), TimeSpan.Parse(end_time), isAccepting);
+                    //Boolean businessIsOpen = (Boolean)k["isOpen"]["BOOL"];
                     this.Kitchens.Add(new KitchensModel()
                     {
                         kitchen_id = k["kitchen_id"]["S"].ToString(),
                         title = k["kitchen_name"]["S"].ToString(),
-                        close_time = k["close_time"]["S"].ToString(),
-                        description = k["description"]["S"].ToString(),
+                        close_time = /*k["close_time"]["S"].ToString()*/end_time,
+                        description = /*k["description"]["S"].ToString()*/start_time,
                         open_time = k["open_time"]["S"].ToString(),
                         isOpen = businessIsOpen,
                         status = (businessIsOpen == true) ? "Open now" : "Closed",
@@ -102,6 +105,7 @@ namespace InfiniteMeals
             await Navigation.PushAsync(new SelectMealOptions(kitchen.kitchen_id));
         }
 
+        
         private int getDayOfWeekIndex(DateTime day)
         {
             if (day.DayOfWeek == DayOfWeek.Sunday)
