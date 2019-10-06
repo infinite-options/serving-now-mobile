@@ -39,7 +39,7 @@ namespace InfiniteMeals
                     string start_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["open_time"]["S"];
                     string end_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
                     //  Check if business is open for this day of the week
-                    Boolean isAccepting = (Boolean)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["is_accepting"]["S"];
+                    Boolean isAccepting = (Boolean)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["is_accepting"]["BOOL"];
                     //  Overall, is the business open?
                     Boolean businessIsOpen = isBusinessOpen(TimeSpan.Parse(start_time), TimeSpan.Parse(end_time), isAccepting);
                     //Boolean businessIsOpen = (Boolean)k["isOpen"]["BOOL"];
@@ -48,8 +48,8 @@ namespace InfiniteMeals
                         kitchen_id = k["kitchen_id"]["S"].ToString(),
                         title = k["kitchen_name"]["S"].ToString(),
                         close_time = /*k["close_time"]["S"].ToString()*/end_time,
-                        description = /*k["description"]["S"].ToString()*/start_time,
-                        open_time = k["open_time"]["S"].ToString(),
+                        description = k["description"]["S"].ToString(),
+                        open_time = /*k["open_time"]["S"].ToString()*/start_time,
                         isOpen = businessIsOpen,
                         status = (businessIsOpen == true) ? "Open now" : "Closed",
                         statusColor = (businessIsOpen == true) ? "Green" : "Red",
