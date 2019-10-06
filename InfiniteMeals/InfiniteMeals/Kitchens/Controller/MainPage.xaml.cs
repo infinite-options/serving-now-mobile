@@ -33,14 +33,23 @@ namespace InfiniteMeals
                 foreach (var k in kitchens["result"])
                 {
                     int dayOfWeekIndex = getDayOfWeekIndex(DateTime.Today);
-                    Boolean businessIsOpen = (Boolean) k["accepting_hours"]["L"][dayOfWeekIndex]["is_accepting"]["BOOL"];
+                    //  Format from AM/PM to 24-hour format
+                    //string start_time = DateTime.Parse((string)k["open_time"]["S"]).ToString("HH:mm");
+                    //string end_time = DateTime.Parse((string)k["close_time"]["S"]).ToString("HH:mm");
+                    string start_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["open_time"]["S"];
+                    string end_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
+                    //  Check if business is open for this day of the week
+                    Boolean isAccepting = (Boolean)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["is_accepting"]["BOOL"];
+                    //  Overall, is the business open?
+                    Boolean businessIsOpen = isBusinessOpen(TimeSpan.Parse(start_time), TimeSpan.Parse(end_time), isAccepting);
+                    //Boolean businessIsOpen = (Boolean)k["isOpen"]["BOOL"];
                     this.Kitchens.Add(new KitchensModel()
                     {
                         kitchen_id = k["kitchen_id"]["S"].ToString(),
                         title = k["kitchen_name"]["S"].ToString(),
-                        close_time = k["close_time"]["S"].ToString(),
+                        close_time = /*k["close_time"]["S"].ToString()*/end_time,
                         description = k["description"]["S"].ToString(),
-                        open_time = k["open_time"]["S"].ToString(),
+                        open_time = /*k["open_time"]["S"].ToString()*/start_time,
                         isOpen = businessIsOpen,
                         status = (businessIsOpen == true) ? "Open now" : "Closed",
                         statusColor = (businessIsOpen == true) ? "Green" : "Red",
@@ -96,6 +105,7 @@ namespace InfiniteMeals
             await Navigation.PushAsync(new SelectMealOptions(kitchen.kitchen_id));
         }
 
+        
         private int getDayOfWeekIndex(DateTime day)
         {
             if (day.DayOfWeek == DayOfWeek.Sunday)
@@ -113,6 +123,44 @@ namespace InfiniteMeals
             if (day.DayOfWeek == DayOfWeek.Saturday)
                 return 6;
             return -1;
+        }
+
+        //  Function checking if business is currently open
+        private Boolean isBusinessOpen(TimeSpan open_time, TimeSpan close_time, Boolean is_accepting)
+        {
+            TimeSpan now = DateTime.Now.TimeOfDay;
+            //  Accepting orders on current day?
+            if (is_accepting == false)
+            {
+                return false;
+            }
+            else
+            {
+                //  Opening and closing hours on same day
+                if (open_time <= close_time)
+                {
+                    if (now >= open_time && now <= close_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                //  Opening and closing hours on different day
+                else
+                {
+                    if (now >= open_time || now <= close_time)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
         }
     }
 }
