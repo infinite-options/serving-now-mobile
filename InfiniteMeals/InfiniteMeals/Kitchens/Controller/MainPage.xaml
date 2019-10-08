@@ -9,7 +9,7 @@
                         <Label Text="{Binding description}" HorizontalOptions="StartAndExpand" FontSize="Medium" FontAttributes="Italic" Opacity="{Binding opacity}"/>
                         
                         <StackLayout Orientation="Horizontal">
-                            <Label Text="Open Hours:" FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
+                            <Label Text="Order Accepting Hours:" FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
                             <Label Text="{Binding open_time}" FontSize="Micro" Opacity="{Binding opacity}"/>
                             <Label Text="-" FontSize="Micro" Opacity="{Binding opacity}"/>
                             <Label Text="{Binding close_time}" FontSize="Micro" Opacity="{Binding opacity}"/>

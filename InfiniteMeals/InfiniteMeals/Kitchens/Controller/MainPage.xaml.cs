@@ -39,23 +39,34 @@ namespace InfiniteMeals
                     string start_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["open_time"]["S"];
                     string end_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
                     //  Check if business is open for this day of the week
-                    Boolean isAccepting = (Boolean)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["is_accepting"]["S"];
+                    Boolean isAccepting = (Boolean)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["is_accepting"]["BOOL"];
+                    Console.WriteLine("k: " + k);
+                    Console.WriteLine("isAccepting: " + isAccepting);
                     //  Overall, is the business open?
-                    Boolean businessIsOpen = isBusinessOpen(TimeSpan.Parse(start_time), TimeSpan.Parse(end_time), isAccepting);
+                    Boolean businessIsOpen = false;
+                    if ((bool)k["is_accepting_24hr"]["BOOL"])
+                    {
+                        businessIsOpen = true;
+                    }
+                    else
+                    {
+                        businessIsOpen = isBusinessOpen(TimeSpan.Parse(start_time), TimeSpan.Parse(end_time), isAccepting);
+                    }
+
                     //Boolean businessIsOpen = (Boolean)k["isOpen"]["BOOL"];
                     this.Kitchens.Add(new KitchensModel()
-                    {
-                        kitchen_id = k["kitchen_id"]["S"].ToString(),
-                        title = k["kitchen_name"]["S"].ToString(),
-                        close_time = /*k["close_time"]["S"].ToString()*/end_time,
-                        description = /*k["description"]["S"].ToString()*/start_time,
-                        open_time = k["open_time"]["S"].ToString(),
-                        isOpen = businessIsOpen,
-                        status = (businessIsOpen == true) ? "Open now" : "Closed",
-                        statusColor = (businessIsOpen == true) ? "Green" : "Red",
-                        opacity = (businessIsOpen == true) ? "1.0" : "0.6"
-                    }
-                    );
+                        {
+                            kitchen_id = k["kitchen_id"]["S"].ToString(),
+                            title = k["kitchen_name"]["S"].ToString(),
+                            close_time = end_time,
+                            description = k["description"]["S"].ToString(),
+                            open_time = start_time,
+                            isOpen = businessIsOpen,
+                            status = (businessIsOpen == true) ? "Open now" : "Closed",
+                            statusColor = (businessIsOpen == true) ? "Green" : "Red",
+                            opacity = (businessIsOpen == true) ? "1.0" : "0.6"
+                        }
+                        );
                 }
 
                 kitchensListView.ItemsSource = Kitchens;

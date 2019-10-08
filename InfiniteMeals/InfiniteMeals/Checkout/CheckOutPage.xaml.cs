@@ -272,12 +272,11 @@ namespace InfiniteMeals
             await Application.Current.SavePropertiesAsync();
             //currentOrder.deliveryTime = deliveryTime.Time.ToString();
 
-            await sendOrderRequest(currentOrder);
-            await DisplayAlert("Thank you!", "Your order has been placed." + System.Environment.NewLine + " An email receipt has been sent to " + currentOrder.email + ". Please complete the payment process by clicking the button below.", "Continue to PayPal");
-            Device.OpenUri(new System.Uri("https://servingnow.me/payment/" + currentOrder.order_id + "/" +  currentOrder.totalAmount));
-
             await Navigation.PopModalAsync();
 
+            await sendOrderRequest(currentOrder);
+            await DisplayAlert("Thank you!", "Your order has been placed." + System.Environment.NewLine + " An email receipt has been sent to " + currentOrder.email + ". Please complete the payment process by clicking the button below.", "Continue to PayPal");
+            Device.OpenUri(new System.Uri("https://servingnow.me/payment/" + currentOrder.order_id + "/" + currentOrder.totalAmount));
         }
             
 
