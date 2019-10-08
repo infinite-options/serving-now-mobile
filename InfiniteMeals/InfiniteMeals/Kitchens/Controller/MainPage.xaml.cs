@@ -146,7 +146,7 @@ namespace InfiniteMeals
             if (index == 2)
                 return "Tuesday";
             if (index == 3)
-                return "Wesnesday";
+                return "Wednesday";
             if (index == 4)
                 return "Thursday";
             if (index == 5)
@@ -162,7 +162,7 @@ namespace InfiniteMeals
             string end_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
             if (businessIsOpen == true)
             {
-                return "until " + end_time;
+                return "Until " + end_time;
             }
             int nextOpenDay = nextPeriodDayIndex(dayOfWeekIndex, k, "accepting_hours", "is_accepting", 0);
             if (nextOpenDay == -1)
@@ -172,17 +172,17 @@ namespace InfiniteMeals
             string next_day;
             if (nextOpenDay == dayOfWeekIndex)
             {
-                next_day = "today";
+                next_day = "Today";
             }
             else if (nextOpenDay == (dayOfWeekIndex + 1) % 7)
             {
-                next_day = "tomorrow";
+                next_day = "Tomorrow";
             }
             else
             {
                 next_day = getDayOfWeekFromIndex(nextOpenDay);
             }
-            return "starting " + next_day + " " + (string)k["accepting_hours"]["L"][nextOpenDay]["M"]["open_time"]["S"];
+            return "Starting " + next_day + " " + (string)k["accepting_hours"]["L"][nextOpenDay]["M"]["open_time"]["S"];
         }
 
         //  When is the next delivery period?
