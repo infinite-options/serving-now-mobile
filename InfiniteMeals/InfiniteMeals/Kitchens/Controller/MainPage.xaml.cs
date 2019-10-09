@@ -156,6 +156,20 @@ namespace InfiniteMeals
             return "Error";
         }
 
+        //  Is the store already closed or is it opening later today?
+        private int isAlreadyClosed(TimeSpan end_time)
+        {
+            TimeSpan now = DateTime.Now.TimeOfDay;
+            if (now < end_time)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
         //  When is the business accepting orders?
         private string whenAccepting(Boolean businessIsOpen, JToken k, int dayOfWeekIndex)
         {
@@ -164,7 +178,7 @@ namespace InfiniteMeals
             {
                 return "Until " + end_time;
             }
-            int nextOpenDay = nextPeriodDayIndex(dayOfWeekIndex, k, "accepting_hours", "is_accepting", 0);
+            int nextOpenDay = nextPeriodDayIndex(dayOfWeekIndex, k, "accepting_hours", "is_accepting", isAlreadyClosed(TimeSpan.Parse(end_time)));
             if (nextOpenDay == -1)
             {
                 return "Not currently accepting orders";
@@ -172,11 +186,11 @@ namespace InfiniteMeals
             string next_day;
             if (nextOpenDay == dayOfWeekIndex)
             {
-                next_day = "Today";
+                next_day = "today";
             }
             else if (nextOpenDay == (dayOfWeekIndex + 1) % 7)
             {
-                next_day = "Tomorrow";
+                next_day = "tomorrow";
             }
             else
             {
