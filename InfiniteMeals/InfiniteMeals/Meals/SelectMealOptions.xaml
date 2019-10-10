@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     x:Class="InfiniteMeals.SelectMealOptions"
-    Title="Serving Now"
+    Title="{Binding kitchen_name}"
     ios:Page.UseSafeArea="true">
 
     <!--<ContentPage.Content>
@@ -68,30 +68,29 @@
     </ScrollView>-->
     <StackLayout Orientation="Vertical">
         <Label XAlign="Center" Margin="5, 10, 5, 10" x:Name="NoMealsLabel" Text="No produce have been posted today for this Business."/>
-        <ListView x:Name="mealsListView" HasUnevenRows="true" IsPullToRefreshEnabled="true" SelectionMode="None" Footer="">
+        <ListView x:Name="mealsListView" HasUnevenRows="True" IsPullToRefreshEnabled="true" SelectionMode="None" Footer="">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         
-                        <StackLayout Orientation="Vertical" Margin="10, 10, 10, 0">
-                            
-                            <Image Source="{Binding imageString}" HeightRequest="175" HorizontalOptions="FillAndExpand" Aspect="AspectFill"></Image>
-                            
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding title}" FontAttributes="Bold" FontSize="Default"></Label>
-                                
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
-                                    <Label Text="$" FontSize="Small" VerticalTextAlignment="Center" HorizontalOptions="EndAndExpand"></Label>
-                                    <Label Text="{Binding price}" FontSize="Small" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" VerticalTextAlignment="Center"></Label>
-                                </StackLayout>
+                        <StackLayout Orientation="Horizontal" Margin="10, 10, 10, 10" HorizontalOptions="FillAndExpand">
+                            <StackLayout Orientation="Vertical">
+                                 <Image Source="{Binding imageString}" HeightRequest="60" WidthRequest="60" Aspect="AspectFill"></Image>
                             </StackLayout>
-                            
-                            <Label Text="{Binding description}" FontAttributes="Italic" FontSize="Small"></Label>
-                            
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0, 10, 0, 10">
-                                <Button Text="-" HorizontalOptions="CenterAndExpand" HeightRequest="30" BorderColor="Gray" BorderWidth="0.5" WidthRequest="30" Clicked="reduceOrders" CommandParameter="{Binding .}"/>
-                                <Label HorizontalTextAlignment="Center" Text="{Binding order_qty}" HorizontalOptions="CenterAndExpand" HeightRequest="30" WidthRequest="50" VerticalTextAlignment="Center"/>
-                                <Button Text="+" HorizontalOptions="CenterAndExpand" HeightRequest="30" BorderColor="Gray" BorderWidth="0.5" WidthRequest="30" Clicked="addOrders" CommandParameter="{Binding .}"/>                
+
+                            <StackLayout Orientation="Vertical" WidthRequest="200">
+                                <Label Text="{Binding title}" FontAttributes="Bold" FontSize="Default"></Label>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="$" FontSize="Small" Margin="0,0,0,0"></Label>
+                                    <Label Text="{Binding price}" FontSize="Small" Margin="0,0,0,0"></Label>
+                                </StackLayout>
+                                <Label Text="{Binding description}" WidthRequest="200" FontAttributes="Italic" FontSize="Small"></Label>
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal">
+                                <Button Text="-" FontSize="40" HeightRequest="10" BorderColor="Gray" BorderWidth="0" Clicked="reduceOrders" CommandParameter="{Binding .}"/>
+                                <Label HorizontalTextAlignment="Center" Text="{Binding order_qty}" WidthRequest="30" VerticalTextAlignment="Center"/>
+                                <Button Text="+" FontSize="30" HeightRequest="10" BorderColor="Gray" BorderWidth="0" Clicked="addOrders" CommandParameter="{Binding .}"/>
                             </StackLayout>
                             
                         </StackLayout>
