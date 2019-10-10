@@ -73,7 +73,7 @@ namespace InfiniteMeals
 
             currentOrder.kitchen_id = kitchen_id;
 
-            foreach(var meal in mealsOrdered)
+            foreach (var meal in mealsOrdered)
             {
                 currentOrder.ordered_items.Add(new Dictionary<string, string>()
                 {
@@ -83,7 +83,6 @@ namespace InfiniteMeals
                     { "price", meal.price }
                 });
             }
-
 
         }
 
@@ -272,11 +271,11 @@ namespace InfiniteMeals
             await Application.Current.SavePropertiesAsync();
             //currentOrder.deliveryTime = deliveryTime.Time.ToString();
 
-            await Navigation.PopModalAsync();
-
             await sendOrderRequest(currentOrder);
             await DisplayAlert("Thank you!", "Your order has been placed." + System.Environment.NewLine + " An email receipt has been sent to " + currentOrder.email + ". Please complete the payment process by clicking the button below.", "Continue to PayPal");
             Device.OpenUri(new System.Uri("https://servingnow.me/payment/" + currentOrder.order_id + "/" + currentOrder.totalAmount));
+
+            await Navigation.PopModalAsync();
         }
             
 
@@ -306,9 +305,9 @@ namespace InfiniteMeals
             //System.Console.WriteLine(response);
             //HttpResponseMessage response = null;
 
-                //string uri = "https://o5yv1ecpk1.execute-api.us-west-2.amazonaws.com/dev/api/v1/meal/order";
-                //response = await client.PostAsync(uri, content);
-                //var result = await response.Content.ReadAsStringAsync();
+            //string uri = "https://o5yv1ecpk1.execute-api.us-west-2.amazonaws.com/dev/api/v1/meal/order";
+            //response = await client.PostAsync(uri, content);
+            //var result = await response.Content.ReadAsStringAsync();
         }
 
     }
