@@ -9,11 +9,13 @@
                         <Label Text="{Binding description}" HorizontalOptions="StartAndExpand" FontSize="Medium" FontAttributes="Italic" Opacity="{Binding opacity}"/>
                         
                         <StackLayout Orientation="Horizontal">
-                            <Label Text="Order Accepting Hours:" FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
-                            <Label Text="{Binding open_time}" FontSize="Micro" Opacity="{Binding opacity}"/>
-                            <Label Text="-" FontSize="Micro" Opacity="{Binding opacity}"/>
-                            <Label Text="{Binding close_time}" FontSize="Micro" Opacity="{Binding opacity}"/>
+                            <Label Text="Accepting Orders: " FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
+                            <Label Text="{Binding open_hours}" FontSize="Micro" Opacity="{Binding opacity}"/>
                             <Label Text="{Binding status}" FontSize="Small" FontAttributes="Bold, Italic" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="{Binding statusColor}" Opacity="{Binding opacity}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Next Delivery: " FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
+                            <Label Text="{Binding delivery_period}" FontSize="Micro" Opacity="{Binding opacity}"/>
                         </StackLayout>
                     </StackLayout>
                 </ViewCell>
