@@ -66,6 +66,7 @@
         
         </Grid>
     </ScrollView>-->
+
     <StackLayout Orientation="Vertical">
         <Label XAlign="Center" Margin="5, 10, 5, 10" x:Name="NoMealsLabel" Text="No produce have been posted today for this Business."/>
         <ListView x:Name="mealsListView" HasUnevenRows="True" IsPullToRefreshEnabled="true" SelectionMode="None" Footer="">
@@ -74,8 +75,8 @@
                     <ViewCell>
                         
                         <StackLayout Orientation="Horizontal" Margin="10, 10, 10, 10" HorizontalOptions="FillAndExpand">
-                            <StackLayout Orientation="Vertical">
-                                 <Image Source="{Binding imageString}" HeightRequest="60" WidthRequest="60" Aspect="AspectFill"></Image>
+                            <StackLayout Orientation="Vertical" HeightRequest="50" WidthRequest="50">
+                                 <Image Source="{Binding imageString}" HeightRequest="50" WidthRequest="50" Aspect="AspectFill"></Image>
                             </StackLayout>
 
                             <StackLayout Orientation="Vertical" WidthRequest="200">

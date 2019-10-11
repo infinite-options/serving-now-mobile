@@ -8,6 +8,7 @@ using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using InfiniteMeals.Kitchens.Model;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace InfiniteMeals
 {
@@ -47,16 +48,20 @@ namespace InfiniteMeals
                     }
                     else
                     {
-                        string start_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["open_time"]["S"];
-                        string end_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
+                        string start_time_12 = ConvertFromToTime((string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["open_time"]["S"], "HH:mm", "h:mm tt");
+                        string end_time_12 = ConvertFromToTime((string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"], "HH:mm", "h:mm tt");
+                        string start_time_24 = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["open_time"]["S"];
+                        string end_time_24 = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
                         Boolean isAccepting = (Boolean)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["is_accepting"]["BOOL"];
-                        businessIsOpen = isBusinessOpen(TimeSpan.Parse(start_time), TimeSpan.Parse(end_time), isAccepting);
+                        businessIsOpen = isBusinessOpen(TimeSpan.Parse(start_time_24), TimeSpan.Parse(end_time_24), isAccepting);
                         accepting_hours = whenAccepting(businessIsOpen, k, dayOfWeekIndex);
                     }
                     string delivery_hours = whenDelivering(dayOfWeekIndex, k);
+                  
                     this.Kitchens.Add(new KitchensModel()
                     {
                         kitchen_id = k["kitchen_id"]["S"].ToString(),
+                        zipcode = formatZipcode(k["zipcode"]["S"].ToString()),
                         title = k["kitchen_name"]["S"].ToString(),
                         open_hours = accepting_hours,
                         delivery_period = delivery_hours,
@@ -113,7 +118,7 @@ namespace InfiniteMeals
                 return;
             }
 
-            await Navigation.PushAsync(new SelectMealOptions(kitchen.kitchen_id));
+            await Navigation.PushAsync(new SelectMealOptions(kitchen.kitchen_id, kitchen.title, kitchen.zipcode));
         }
 
         //  Get integer index of day of the week, with 0 as Sunday
@@ -173,12 +178,13 @@ namespace InfiniteMeals
         //  When is the business accepting orders?
         private string whenAccepting(Boolean businessIsOpen, JToken k, int dayOfWeekIndex)
         {
-            string end_time = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
+            string end_time_12 = ConvertFromToTime((string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"], "HH:mm", "h:mm tt");
+            string end_time_24 = (string)k["accepting_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
             if (businessIsOpen == true)
             {
-                return "Until " + end_time;
+                return "Until " + end_time_12;
             }
-            int nextOpenDay = nextPeriodDayIndex(dayOfWeekIndex, k, "accepting_hours", "is_accepting", isAlreadyClosed(TimeSpan.Parse(end_time)));
+            int nextOpenDay = nextPeriodDayIndex(dayOfWeekIndex, k, "accepting_hours", "is_accepting", isAlreadyClosed(TimeSpan.Parse(end_time_24)));
             if (nextOpenDay == -1)
             {
                 return "Not currently accepting orders";
@@ -196,7 +202,7 @@ namespace InfiniteMeals
             {
                 next_day = getDayOfWeekFromIndex(nextOpenDay);
             }
-            return "Starting " + next_day + " " + (string)k["accepting_hours"]["L"][nextOpenDay]["M"]["open_time"]["S"];
+            return "Starting " + next_day + " " + ConvertFromToTime((string)k["accepting_hours"]["L"][nextOpenDay]["M"]["open_time"]["S"], "HH:mm", "h:mm tt");
         }
 
         //  When is the next delivery period?
@@ -205,7 +211,9 @@ namespace InfiniteMeals
             int nextDeliveryDayIndex = nextPeriodDayIndex(dayOfWeekIndex, k, "delivery_hours", "is_delivering", 1);
             if (nextDeliveryDayIndex != -1)
             {
-                return getDayOfWeekFromIndex(nextDeliveryDayIndex) + " " + (string)k["delivery_hours"]["L"][dayOfWeekIndex]["M"]["open_time"]["S"] + "-" + (string)k["delivery_hours"]["L"][dayOfWeekIndex]["M"]["close_time"]["S"];
+                var deliveryOpenTime = ConvertFromToTime((string)k["delivery_hours"]["L"][nextDeliveryDayIndex]["M"]["open_time"]["S"], "HH:mm", "h:mm tt");
+                var deliveryCloseTime = ConvertFromToTime((string)k["delivery_hours"]["L"][nextDeliveryDayIndex]["M"]["close_time"]["S"], "HH:mm", "h:mm tt");
+                return getDayOfWeekFromIndex(nextDeliveryDayIndex) + " " + deliveryOpenTime + " - " + deliveryCloseTime;
             }
             else
             {
@@ -266,6 +274,34 @@ namespace InfiniteMeals
                     }
                 }
             }
+        }
+
+
+        private string formatZipcode(string zipcode)
+        {
+            if (zipcode == "95120")
+            {
+                return "Almaden";
+            }
+            if (zipcode == "95135")
+            {
+                return "Evergreen";
+            }
+            if (zipcode == "95060")
+            {
+                return "Santa Cruz";
+            }
+            return "Other";
+        }
+
+        // https://www.niceonecode.com/Question/20540/how-to-convert-24-hours-string-format-to-12-hours-format-in-csharp
+        public static string ConvertFromToTime(string timeHour, string inputFormat, string outputFormat)
+        {
+            var timeFromInput = DateTime.ParseExact(timeHour, inputFormat, null, DateTimeStyles.None);
+            string timeOutput = timeFromInput.ToString(
+                outputFormat,
+                CultureInfo.InvariantCulture);
+            return timeOutput;
         }
     }
 }

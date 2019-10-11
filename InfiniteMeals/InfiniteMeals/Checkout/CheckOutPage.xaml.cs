@@ -41,6 +41,8 @@ namespace InfiniteMeals
 
         double calculatedTaxAmount = 0;
 
+        string kitchenZipcode;
+
         //var firstNameField = new Entry() { Placeholder="First name", HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Start, HeightRequest = 45 };
         //var lastNameField = new Entry() { Placeholder = "Last name", HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Start, HeightRequest = 45 };
         public Entry fullNameField = new Entry() { Placeholder = "Full name", HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Start, HeightRequest = 45 };
@@ -56,9 +58,11 @@ namespace InfiniteMeals
 
 
 
-        public CheckOutPage(ObservableCollection<MealsModel> meals, string kitchen_id)
+        public CheckOutPage(ObservableCollection<MealsModel> meals, string kitchen_id, string kitchen_zipcode)
         {
             InitializeComponent();
+
+            kitchenZipcode = kitchen_zipcode;
 
             mealsOrdered = meals;
             SetupUI();
@@ -130,12 +134,14 @@ namespace InfiniteMeals
 
             // calculate tax amount
             calculatedTaxAmount = Math.Round((totalCostsForMeals * 0.09), 2);
-            
+
+            String currencyTax = FormatCurrency(calculatedTaxAmount.ToString());
+
             var taxLabel = new Label() { Text = "Tax", FontSize = 12 };
-            var taxAmount = new Label() { Text = "$ " + calculatedTaxAmount.ToString(), FontSize = 12, HorizontalTextAlignment = TextAlignment.End };
+            var taxAmount = new Label() { Text = "$ " + currencyTax, FontSize = 12, HorizontalTextAlignment = TextAlignment.End };
 
             var totalAmountTextLabel = new Label() { Text = "Total Amount", FontSize = 14, FontAttributes = FontAttributes.Bold };
-            var totalAmountLabel = new Label() { Text = "$ " + (calculatedTaxAmount + totalCostsForMeals).ToString(), FontSize = 14, FontAttributes = FontAttributes.Bold, HorizontalTextAlignment = TextAlignment.End };
+            var totalAmountLabel = new Label() { Text = "$ " + FormatCurrency((calculatedTaxAmount + totalCostsForMeals).ToString()), FontSize = 14, FontAttributes = FontAttributes.Bold, HorizontalTextAlignment = TextAlignment.End };
 
             // store total amount of the order
             currentOrder.totalAmount = (calculatedTaxAmount + totalCostsForMeals).ToString();
@@ -192,8 +198,13 @@ namespace InfiniteMeals
             var checkoutButton = new Button() { Text = "Proceed to Payment", HeightRequest = 40, Margin = new Thickness(20, 10, 20, 10), BorderWidth = 0.5, BorderColor = Color.Gray};
             checkoutButton.Clicked += Handle_Clicked();
 
+
             mainStackLayout.Children.Add(scrollView);
             mainStackLayout.Children.Add(checkoutButton);
+
+            var copyrightLabel = new Label() { Text = "© Infinite Options v1.2", FontSize = 10, HorizontalOptions = LayoutOptions.Center,  Margin = new Thickness(20, 10, 20, 10) };
+
+            mainStackLayout.Children.Add(copyrightLabel);
 
             Content = new StackLayout
             {
@@ -204,7 +215,6 @@ namespace InfiniteMeals
         private EventHandler Handle_Clicked()
         {
             return placeOrder;
-
         }
 
 
@@ -260,14 +270,27 @@ namespace InfiniteMeals
             }
             if (zipCodeField.Text != null)
             {
-                if (zipCodeField.Text != "95120")
+                if (zipCodeField.Text.Trim() == "95120" || zipCodeField.Text.Trim() == "95135" || zipCodeField.Text.Trim() == "95060" || zipCodeField.Text.Trim() == "90000")
                 {
-                    await DisplayAlert("Sorry for the inconvience!", "Serving Now is only accepting addresses within the 95120 zipcode area for experimental testing purposes.", "OK");
+                    Console.WriteLine("customer zipcode: " + zipCodeField.Text.Trim());
+                    Console.WriteLine("farmer zipcode: " + kitchenZipcode.Trim());
+                    if (zipCodeField.Text.Trim() != parseAreaToZipcode(kitchenZipcode.Trim()))
+                    {
+                        await DisplayAlert("Sorry for the inconvience!", "Serving Now is only accepting orders from farms within " + formatZipcode(zipCodeField.Text.Trim()) + ".", "OK");
+                        return;
+                    }
+                    Application.Current.Properties["zip"] = zipCodeField.Text;
+                    currentOrder.zipCode = zipCodeField.Text;
+                }
+                else
+                {
+                    await DisplayAlert("Sorry for the inconvience!", "Serving Now is only accepting orders from the 95060, 95120, and 95135, zip codes.", "OK");
                     return;
                 }
-                Application.Current.Properties["zip"] = zipCodeField.Text;
-                currentOrder.zipCode = zipCodeField.Text;
             }
+
+            ((Button)sender).IsEnabled = false;
+
             await Application.Current.SavePropertiesAsync();
             //currentOrder.deliveryTime = deliveryTime.Time.ToString();
 
@@ -276,6 +299,7 @@ namespace InfiniteMeals
             Device.OpenUri(new System.Uri("https://servingnow.me/payment/" + currentOrder.order_id + "/" + currentOrder.totalAmount));
 
             await Navigation.PopModalAsync();
+            // "(Copyright Symbol) 2019 Infinite Options   v1.2"
         }
             
 
@@ -310,5 +334,55 @@ namespace InfiniteMeals
             //var result = await response.Content.ReadAsStringAsync();
         }
 
+        private String FormatCurrency(String number)
+        {
+            if (!number.Contains("."))
+            {
+                return number + ".00";
+            }
+            if (number[number.Length - 2] == '.')
+            {
+                return number + "0";
+            }
+            return number;
+        }
+
+        private string formatZipcode(string zipcode)
+        {
+            if (zipcode == "95120")
+            {
+                return "Almaden";
+            }
+            if (zipcode == "95135")
+            {
+                return "Evergreen";
+            }
+            if (zipcode == "95060")
+            {
+                return "Santa Cruz";
+            }
+            return "Other";
+        }
+
+        private string parseAreaToZipcode(string zipcode)
+        {
+            if (zipcode == "Almaden")
+            {
+                return "95120";
+            }
+            if (zipcode == "Evergreen")
+            {
+                return "95135";
+            }
+            if (zipcode == "Santa Cruz")
+            {
+                return "95060";
+            }
+            if (zipcode == "Other")
+            {
+                return "90000";
+            }
+            return "";
+        }
     }
 }
