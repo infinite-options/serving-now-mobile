@@ -19,9 +19,11 @@ namespace InfiniteMeals
         public ObservableCollection<MealsModel> Meals = new ObservableCollection<MealsModel>();
 
         private string kitchenID;
+        private string kitchenZipcode;
 
         protected async Task GetMeals(string kitchen_id)
         {
+            //Console.WriteLine("kitchen_name: " + kitchen_name);
             NoMealsLabel.IsVisible = false;
             var request = new HttpRequestMessage();
             request.RequestUri = new Uri("https://phaqvwjbw6.execute-api.us-west-1.amazonaws.com/dev/api/v1/meals/" + kitchen_id);
@@ -43,15 +45,15 @@ namespace InfiniteMeals
 
                 this.Meals.Clear();
 
-                Console.WriteLine("meals['result']: " + meals["result"]);
-                Console.WriteLine("meals: " + meals);
+                //Console.WriteLine("meals['result']: " + meals["result"]);
+                //Console.WriteLine("meals: " + meals);
 
                 NoMealsLabel.IsVisible = true;
                 foreach (var m in meals["result"])
                 {
                     //Console.WriteLine("created: " + m["created_at"]["S"]);
                     //Console.WriteLine("today: " + todaysDate);
-                    if (m["created_at"]["S"].ToString().Contains(todaysDate) || strToBool(m["auto_renew"]["BOOL"].ToString()))
+                    if (m["created_at"]["S"].ToString().Contains(todaysDate) || (Boolean)m["auto_renew"]["BOOL"])
                     {
                         NoMealsLabel.IsVisible = false;
                         this.Meals.Add(new MealsModel()
@@ -73,11 +75,14 @@ namespace InfiniteMeals
 
         }
 
-        public SelectMealOptions(string kitchen_id)
+        public SelectMealOptions(string kitchen_id, string kitchen_name, string zipcode)
         {
             InitializeComponent();
 
+            SetBinding(TitleProperty, new Binding(kitchen_name));
+
             kitchenID = kitchen_id;
+            kitchenZipcode = zipcode;
 
             GetMeals(kitchenID);
 
@@ -96,7 +101,7 @@ namespace InfiniteMeals
             }
             else
             {
-                var secondPage = new CheckOutPage(Meals, kitchenID);
+                var secondPage = new CheckOutPage(Meals, kitchenID, kitchenZipcode);
                 await Navigation.PushAsync(secondPage);
             }
 
@@ -135,15 +140,6 @@ namespace InfiniteMeals
             }
         }
 
-        private Boolean strToBool(String s)
-        {
-            if (s == "True" || s == "true") {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
         //public string createUrl()
         //{
         //    DateTime dateTime = DateTime.UtcNow.Date;
@@ -153,4 +149,5 @@ namespace InfiniteMeals
         //    return url;
         //}
     }
+
 }
