@@ -134,26 +134,66 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon20.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\IconTL20pt2x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\IconTL29pt2x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\IconTL40pt2x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon60.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon40.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon58.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\120x120.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon512.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\20x20%403x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\20x20%402x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\29x29%402x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\29x29%403x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40x40%402x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40x40%403x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\60x60%402x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\60x60%403x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\20x20%401x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\29x29%401x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\76x76%401x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\76x76%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\IconTL20pt2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\IconTL29pt2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\IconTL40pt2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon60.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon40.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon58.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\120x120.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon512.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\20x20%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\20x20%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\29x29%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\29x29%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40x40%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40x40%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\60x60%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\60x60%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\20x20%401x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\29x29%401x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\76x76%401x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\76x76%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

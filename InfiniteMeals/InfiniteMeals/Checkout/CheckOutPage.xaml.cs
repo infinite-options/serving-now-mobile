@@ -63,7 +63,7 @@ namespace InfiniteMeals
             InitializeComponent();
 
             kitchenZipcode = kitchen_zipcode;
-
+            Console.WriteLine("KitchenZipcodeIS"+ kitchenZipcode);
             mealsOrdered = meals;
             SetupUI();
 
@@ -126,11 +126,15 @@ namespace InfiniteMeals
                 if (meal.order_qty >= 1)
                 {
                     var mealNameLabel = new Label() { Text = meal.title, FontSize = 12 };
-                    var mealPriceAndQty = new Label() { Text = meal.order_qty.ToString() + "  x  " + "$ " + meal.price, FontSize = 12 };
+                    var mealPriceAndQty = new Label() { Text = meal.order_qty.ToString() + "  x  " + "$ " + FormatCurrency(meal.price), FontSize = 12 };
                     orderNamesStackLayout.Children.Add(mealNameLabel);
                     orderPriceAndQtyLayout.Children.Add(mealPriceAndQty);
                 }
             }
+
+            // Add delivery charges
+            double delCharges = 5.00;
+            totalCostsForMeals += delCharges;
 
             // calculate tax amount
             calculatedTaxAmount = Math.Round((totalCostsForMeals * 0.09), 2);
@@ -138,7 +142,10 @@ namespace InfiniteMeals
             String currencyTax = FormatCurrency(calculatedTaxAmount.ToString());
 
             var taxLabel = new Label() { Text = "Tax", FontSize = 12 };
+            var deliveryLabel = new Label() { Text = "Delivery charges", FontSize = 12 };
+
             var taxAmount = new Label() { Text = "$ " + currencyTax, FontSize = 12, HorizontalTextAlignment = TextAlignment.End };
+            var deliveryAmount = new Label() { Text = "$ " + FormatCurrency(delCharges.ToString()), FontSize = 12, HorizontalTextAlignment = TextAlignment.End };
 
             var totalAmountTextLabel = new Label() { Text = "Total Amount", FontSize = 14, FontAttributes = FontAttributes.Bold };
             var totalAmountLabel = new Label() { Text = "$ " + FormatCurrency((calculatedTaxAmount + totalCostsForMeals).ToString()), FontSize = 14, FontAttributes = FontAttributes.Bold, HorizontalTextAlignment = TextAlignment.End };
@@ -152,9 +159,12 @@ namespace InfiniteMeals
             currentOrder.order_id = g.ToString();
 
             orderNamesStackLayout.Children.Add(taxLabel);
+            orderNamesStackLayout.Children.Add(deliveryLabel);
             orderNamesStackLayout.Children.Add(totalAmountTextLabel);
+            
 
             orderPriceAndQtyLayout.Children.Add(taxAmount);
+            orderPriceAndQtyLayout.Children.Add(deliveryAmount);
             orderPriceAndQtyLayout.Children.Add(totalAmountLabel);
 
 
@@ -270,35 +280,60 @@ namespace InfiniteMeals
             }
             if (zipCodeField.Text != null)
             {
-                if (zipCodeField.Text.Trim() == "95120" || zipCodeField.Text.Trim() == "95135" || zipCodeField.Text.Trim() == "95060" || zipCodeField.Text.Trim() == "90000")
+                List<String> ZipCodes = new List<String>()
+                {
+                    "94024",
+                    "94087",
+                    "95014",
+                    "95030",
+                    "95032",
+                    "95051",
+                    "95070",
+                    "95111",
+                    "95112",
+                    "95120",
+                    "95123",
+                    "95124",
+                    "95125"
+                };
+                /*List<String> ZipCodes = new List<String>()
+                {
+                    "95120",
+                    "95135",
+                    "95060"
+
+                };*/
+                if (ZipCodes.Contains(zipCodeField.Text.Trim()))
                 {
                     Console.WriteLine("customer zipcode: " + zipCodeField.Text.Trim());
                     Console.WriteLine("farmer zipcode: " + kitchenZipcode.Trim());
-                    if (zipCodeField.Text.Trim() != parseAreaToZipcode(kitchenZipcode.Trim()))
+                    /*if (zipCodeField.Text.Trim() != parseAreaToZipcode(kitchenZipcode.Trim()))
                     {
                         await DisplayAlert("Sorry for the inconvience!", "Serving Now is only accepting orders from farms within " + formatZipcode(zipCodeField.Text.Trim()) + ".", "OK");
                         return;
-                    }
+                    }*/
                     Application.Current.Properties["zip"] = zipCodeField.Text;
                     currentOrder.zipCode = zipCodeField.Text;
                 }
                 else
                 {
-                    await DisplayAlert("Sorry for the inconvience!", "Serving Now is only accepting orders from the 95060, 95120, and 95135, zip codes.", "OK");
+                    await DisplayAlert("Sorry for the inconvience!", "Serving Now is only accepting orders from the" +
+                        " 94024, 94087, 95014, 95030, 95032, 95051, 95052, 95070, 95111, 95112, 95120, 95123, " +
+                        "95124 and 95125 zip codes.", "OK");
                     return;
                 }
             }
-
+            
             ((Button)sender).IsEnabled = false;
 
             await Application.Current.SavePropertiesAsync();
             //currentOrder.deliveryTime = deliveryTime.Time.ToString();
-
             await sendOrderRequest(currentOrder);
-            await DisplayAlert("Thank you!", "Your order has been placed." + System.Environment.NewLine + " An email receipt has been sent to " + currentOrder.email + ". Please complete the payment process by clicking the button below.", "Continue to PayPal");
+            await DisplayAlert("Thank you!", "Your order has been placed." + System.Environment.NewLine + "An email receipt has been sent to " + currentOrder.email + ". Please complete the payment process by clicking the button below.", "Continue to PayPal");
             Device.OpenUri(new System.Uri("https://servingnow.me/payment/" + currentOrder.order_id + "/" + currentOrder.totalAmount));
 
-            await Navigation.PopModalAsync();
+            // await Navigation.PopModalAsync();
+            await Navigation.PopAsync();
             // "(Copyright Symbol) 2019 Infinite Options   v1.2"
         }
             
@@ -361,6 +396,7 @@ namespace InfiniteMeals
             {
                 return "Santa Cruz";
             }
+
             return "Other";
         }
 
@@ -382,6 +418,7 @@ namespace InfiniteMeals
             {
                 return "90000";
             }
+            
             return "";
         }
     }
