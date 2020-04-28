@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:InfiniteMeals" x:Class="InfiniteMeals.MainPage" Title="Serving Now">
-    <ListView x:Name="kitchensListView" VerticalOptions="StartAndExpand" Footer="" HasUnevenRows="true" IsPullToRefreshEnabled="true">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <StackLayout Margin="15, 15, 15, 15" Orientation="Vertical">
-                        <Label Text="{Binding title}" HorizontalOptions="StartAndExpand" FontSize="Large" FontAttributes="Bold" Opacity="{Binding opacity}"/>
-                        <Label Text="{Binding zipcode}" HorizontalOptions="Start" FontSize="Small" FontAttributes="Italic" Opacity="{Binding opacity}"/>
-                        <Label Text="{Binding description}" HorizontalOptions="StartAndExpand" FontSize="Medium" FontAttributes="Italic" Opacity="{Binding opacity}"/>
-                        
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Accepting Orders: " FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
-                            <Label Text="{Binding open_hours}" FontSize="Micro" Opacity="{Binding opacity}"/>
-                            <Label Text="{Binding status}" FontSize="Small" FontAttributes="Bold, Italic" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="{Binding statusColor}" Opacity="{Binding opacity}"/>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:InfiniteMeals" x:Class="InfiniteMeals.MainPage" Title="Serving Now" NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        
+        <StackLayout BackgroundColor="White">
+            <StackLayout Grid.Row="0" Orientation="Horizontal" BackgroundColor="Blue" HeightRequest="60">
+                <Button Text="" WidthRequest="60" HorizontalOptions="Center" Margin="5,2.5,0,2.5" HeightRequest="60" BackgroundColor="Blue"
+                BorderColor="Red" BorderRadius="30" Image="Dsign6.png" Grid.Row="0" Grid.Column ="0" />
+                
+                <Button Text="" WidthRequest="60" HorizontalOptions="Center" Margin="275,2.55,0,2.5" HeightRequest="60" BackgroundColor="Blue"
+                BorderColor="Red" BorderRadius="30" Image="Dsign5.png" Grid.Row="0" Grid.Column ="0" />
+            </StackLayout>
+
+            <ListView x:Name="kitchensListView" VerticalOptions="StartAndExpand" Footer="" HasUnevenRows="true" IsPullToRefreshEnabled="true">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Margin="15, 15, 15, 15" Orientation="Vertical">
+                            <Label Text="{Binding title}" HorizontalOptions="StartAndExpand" FontSize="Large" FontAttributes="Bold" Opacity="{Binding opacity}"/>
+                            <Label Text="{Binding zipcode}" HorizontalOptions="Start" FontSize="Small" FontAttributes="Italic" Opacity="{Binding opacity}"/>
+                            <Label Text="{Binding description}" HorizontalOptions="StartAndExpand" FontSize="Medium" FontAttributes="Italic" Opacity="{Binding opacity}"/>
+
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Accepting Orders: " FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
+                                <Label Text="{Binding open_hours}" FontSize="Micro" Opacity="{Binding opacity}"/>
+                                <Label Text="{Binding status}" FontSize="Small" FontAttributes="Bold, Italic" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="{Binding statusColor}" Opacity="{Binding opacity}"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Next Delivery: " FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
+                                <Label Text="{Binding delivery_period}" FontSize="Micro" Opacity="{Binding opacity}"/>
+                            </StackLayout>
                         </StackLayout>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Next Delivery: " FontAttributes="Bold" FontSize="Micro" Opacity="{Binding opacity}"/>
-                            <Label Text="{Binding delivery_period}" FontSize="Micro" Opacity="{Binding opacity}"/>
-                        </StackLayout>
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>
